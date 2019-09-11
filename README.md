@@ -57,7 +57,7 @@ to an Arduino. The project consists in :
 
 ### Installing
 
-Python libraries intallation
+Python libraries installation
 
 aiohttp
 
