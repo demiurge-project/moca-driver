@@ -1,0 +1,29 @@
+{
+    "experiment": {
+        "totalTime": 30,
+        "repeat": true,
+        "clean": true,
+        "states": [
+            {
+                "time": 2,
+                "arena": {
+                    "edges": 3,
+                    "blocks": 2,
+                    "leds": 2,
+                    "color": "red",
+                    "brightness": 1
+                }
+            },
+            {
+                "time": 2,
+                "arena": {
+                    "edges": 3,
+                    "blocks": 2,
+                    "leds": 2,
+                    "color": "green",
+                    "brightness": 1
+                }
+            }
+        ]
+    }
+}

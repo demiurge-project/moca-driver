@@ -1,0 +1,14 @@
+{
+    "arena": {
+        "edges": 2,
+        "blocks": 1,
+        "leds": 12,
+        "brightness": 100,
+        "color": "red",
+        "led":[
+        	{
+        		"index":[13,24],"color":"green"
+        	}
+        ]
+    }
+}

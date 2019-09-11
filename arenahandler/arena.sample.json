@@ -1,0 +1,33 @@
+{
+    "arena": {
+        "edges": 3,
+        "blocks": 2,
+        "leds": 2,
+        "color": "omit",
+        "brightness": 5,
+        "edge": [
+            {
+                "color": "yellow",
+                "index": [ 2 ],
+                "block": [
+                    {
+                        "color": "blue",
+                        "index": [ 2 ]
+                    }
+                ]
+            }
+        ],
+        "block": [
+            {
+                "color": "red",
+                "index": [ -1, 3 ]
+            }
+        ],
+        "led": [
+            {
+                "color": "red",
+                "index": [ 1, 2 ]
+            }
+        ]
+    }
+}

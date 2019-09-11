@@ -1,0 +1,54 @@
+{
+	"experiment":{
+		"totalTime":20,
+		"repeat": true,
+		"clean": true,
+		"states":[
+			{
+				"time":1,
+				"arena": {
+			        "edges": 2,
+			        "blocks": 1,
+			        "leds": 12,
+			        "brightness": 100,
+			        "color": "omit",
+			        "block":[
+			        	{
+			        		"index":[-1,1],"color":"red"
+			        	}
+			        ]
+			    }
+		    },
+		    {
+		    	"time":1,
+		    	"arena": {
+			        "edges": 2,
+			        "blocks": 1,
+			        "leds": 12,
+			        "brightness": 100,
+			        "color": "omit",
+			        "block":[
+			        	{
+			        		"index":[-1,-2,-1],"color":"green"
+			        	}
+			        ]
+			    }
+		    },
+		    {
+		    	"time":1,
+		    	"arena": {
+			        "edges": 2,
+			        "blocks": 1,
+			        "leds": 12,
+			        "brightness": 100,
+			        "color": "omit",
+			        "block":[
+			        	{
+			        		"index":[1,2],"color":"yellow"
+			        	}
+			        ]
+			    }
+		    }
+		]
+	}
+}

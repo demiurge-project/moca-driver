@@ -1,0 +1,9 @@
+{
+    "arena": {
+        "edges": 1,
+        "blocks": 1,
+        "leds": 24,
+        "brightness": 100,
+        "color":"blue"
+     }
+ }
