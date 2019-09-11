@@ -3,8 +3,8 @@ This is the fundamental module which parses and interprets the states and expe-
 riments that are comming from the http requests. This module utilises an sched-
 uler in order schedule the different states within an experiment. If there are
 task scheduled but an simple state execution is received then all the scheduled
-task are canceled. The module contains the implementation for the differente 
-level of control offered by the language definiton. 
+task are canceled. The module contains the implementation for the differente
+level of control offered by the language definiton.
 """
 import json
 import copy
@@ -31,7 +31,7 @@ scheduler = sched.scheduler(time.time, time.sleep)
 
 
 async def runState(state):
-    """ 
+    """
         runState service controller.
         ----------
         state : Dict
@@ -43,11 +43,14 @@ async def runState(state):
     arena = Arena(jsonArena)
     if not scheduler.empty():
         list(map(scheduler.cancel, scheduler.queue))
-    generateArdInsForArena(arena)
+    aIns = ArduinoInstruction(SERIALPORT, BAUDRATE)
+    aIns.start_connection()
+    generateArdInsForArena(arena, aIns)
+    aIns.close_connection()
 
 
 async def runExperiment(experiment):
-    """ 
+    """
         runExperiment service controller.
         ----------
         experiment : Dict
@@ -59,11 +62,13 @@ async def runExperiment(experiment):
     jsonExperiment = json.dumps(experiment['experiment'])
     exp = Experiment(jsonExperiment)
     exp.parseStates()
+    aIns = ArduinoInstruction(SERIALPORT, BAUDRATE)
+    aIns.start_connection()
     if not scheduler.empty():
         list(map(scheduler.cancel, scheduler.queue))
     for t in range(exp.repeatTimes):
         for state in exp.states:
-            scheduler.enter(delay, 1, generateArdInsForArena, (state.arena,))
+            scheduler.enter(delay, 1, generateArdInsForArena, (state.arena, aIns, ))
             if delay > exp.totalTime and exp.repeat:
                 break
             delay += state.time
@@ -75,14 +80,16 @@ async def runExperiment(experiment):
         cleanconf.led = []
         scheduler.enter(
             delay +
-            exp.states[-1].time, 1, generateArdInsForArena, (cleanconf,)
+            exp.states[-1].time, 1, generateArdInsForArena, (cleanconf, aIns, )
         )
     # Start a thread to run the events
     t = threading.Thread(target=scheduler.run)
     t.start()
+    t.join()
+    aIns.close_connection()
 
 
-def generateArdInsForArena(arena):
+def generateArdInsForArena(arena, aIns):
     """
     This function executes the arena configuration and its Edge, Block and lEDs
     instructions.
@@ -98,8 +105,6 @@ def generateArdInsForArena(arena):
         "Arena: %d, %d, %d, %s"
         % (arena.edges, arena.blocks, arena.leds, arena.color)
     )
-    aIns = ArduinoInstruction(SERIALPORT, BAUDRATE)
-    aIns.start_connection()
     for i in range(0, (arena.blocks * arena.edges)):
         bIns = BlockInstruction()
         bIns.brightness = arena.brightness
@@ -117,8 +122,6 @@ def generateArdInsForArena(arena):
     # Leds in arena Indvidually
     if hasattr(arena, 'led'):
         rangeOrSingleLed(arena.led, arena, aIns, True)
-
-    aIns.close_connection()
 
 
 def generateArdInsForEdge(edge, arena, aIns):
@@ -145,7 +148,9 @@ def generateArdInsForEdge(edge, arena, aIns):
         fromNegToPosEq(arena.edges, edgeIndex) \
         if (edgeIndex < 0) else edgeIndex
     logger.info("Edge: %s, %d" % (edge.color, edgeIndex))
-    for i in range(-1, (arena.blocks - 1)):
+    lb = -1 if arena.blocks == 1 else 1 - arena.blocks
+    ub = 0 if arena.blocks == 1 else arena.blocks + (1 - arena.blocks)
+    for i in range(lb, ub):
         bIns = BlockInstruction()
         bIns.brightness = arena.brightness
         ardIdx = str((edgeIndex * arena.blocks + i) - 1) \
@@ -216,7 +221,7 @@ def generateArdInsForBlock(block, arena, aIns):
         str(blockIndex - 1) + "," \
         + str(arena.leds) + "," \
         + Color[block.color.upper()].value
-    # If there are some leds, add them to the block instruction. # si algo sale mal segurament es aqui
+    # If there are some leds, add them to the block instruction.
     if hasattr(block, 'led'):
         for jsonLed in block.led:
             led = Led(json.dumps(jsonLed))
@@ -322,7 +327,7 @@ def generateArdInsForLed(led, arena, aIns):
 
 def fromRelPosToAbsPos(edIdx, bckPerEd, bckIdx, space):  # edgeBlock->Block
     """
-    This function transform the relative position of an index using the 
+    This function transform the relative position of an index using the
     relative index, the number of blocks per edge, the index block and the space
     in which this index should be. The function accepts negative indexes.
     ----------
