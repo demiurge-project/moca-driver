@@ -476,6 +476,21 @@ the `totalTime` is reached.
 }
 ```
 
+## Useful commands
+
+You can use [curl](https://curl.haxx.se/) to interface directly with MoCA. For example, if you have an arena between 1 and 24 blocks, and you wish to turn off all the LEDs, you can type the command: 
+```
+curl -X POST -H "Content-Type: application/json" -d '{"arena":{"edges":1,"blocks":1,"leds":288,"color":"none","brightness": 35,"block":[{"index":[1],"color":"none"}]}}' http://localhost:8080/arena-handler/api/v1.0/state
+```
+Or, if you wish to turn on all the LEDs with color red, you can type the command:
+```
+curl -X POST -H "Content-Type: application/json" -d '{"arena":{"edges":1,"blocks":1,"leds":288,"color":"none","brightness": 35,"block":[{"index":[1],"color":"red"}]}}' http://localhost:8080/arena-handler/api/v1.0/state
+```
+If you have created a experiment file, you can use curl to execute the file. Enter the directory of the file and type the command:
+```
+curl -X POST -H "Content-Type: application/json" -d @experiment_file.json http://localhost:8080/arena-handler/api/v1.0/experiment
+```
+
 ## Authors
 
 * **Keneth Ubeda**

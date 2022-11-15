@@ -71,7 +71,7 @@ async def runExperiment(experiment):
             scheduler.enter(delay, 1, generateArdInsForArena, (state.arena, aIns, ))
             if delay > exp.totalTime and exp.repeat:
                 break
-            delay += state.time
+            delay += state.time 
     if exp.clean:
         cleanconf = copy.copy(exp.states[-1].arena)
         cleanconf.color = "none"
@@ -105,14 +105,14 @@ def generateArdInsForArena(arena, aIns):
         "Arena: %d, %d, %d, %s"
         % (arena.edges, arena.blocks, arena.leds, arena.color)
     )
-    for i in range(0, (arena.blocks * arena.edges)):
-        bIns = BlockInstruction()
-        bIns.brightness = arena.brightness
-        bIns.block = \
-            str(i) + "," \
-            + str(arena.leds) + "," \
-            + Color[arena.color.upper()].value
-        logger.info(aIns.send_instrunction(str(bIns.toJSON())))
+    #for i in range(0, (arena.blocks * arena.edges)):
+    #    bIns = BlockInstruction()
+    #    bIns.brightness = arena.brightness
+    #    bIns.block = \
+    #        str(i) + "," \
+    #        + str(arena.leds) + "," \
+    #        + Color[arena.color.upper()].value
+    #    logger.info(aIns.send_instrunction(str(bIns.toJSON())))
     # Edges in arena Individually
     if hasattr(arena, 'edge'):
         rangeOrSingleEdge(arena.edge, arena, aIns, True)
