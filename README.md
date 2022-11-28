@@ -1,8 +1,11 @@
-# Dynamic lighting arena for swarm robotics
+# MoCA: a modular RGB color arena for swarm robotics experiments
 
-This project was developed as a handler of dynamic lighting polygonal arena 
-which is compounded of blocks of leds built with the APA102 LED strip connected 
-to an Arduino. The project consists in :
+MoCA is an open-source modular system to perform experiments with robot swarms. 
+It provides the menas to build polygonal RGB exoperimental arenas.
+MoCA comprises a series of RGB modules that enclose the RGB LED strip APA102, an
+Arduino microcontroller, and the controller of MoCA that runs in a host computer. 
+
+This repository contains:
 
 1. The Arduino firmware
 2. An inteferface between the handler and the arduino
